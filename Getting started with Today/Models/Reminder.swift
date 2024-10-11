@@ -15,6 +15,19 @@ struct Reminder: Identifiable {
     var isComplete: Bool = false
 }
 
+
+// extension Array where Element == Reminder
+extension [Reminder] {
+    // Reminder에 직접 액세스하는 대신 이 메서드를 사용하면 잠재적인 오류를 줄이고 코드 유지 관리가 더 쉬워집니다.
+    func indexOfReminder(with id: Reminder.ID) -> Self.Index {
+        guard let index = firstIndex(where: { $0.id == id }) else {
+            fatalError()
+        }
+        return index
+    }
+    
+}
+
 #if DEBUG
 extension Reminder {
     static var sampleData = [

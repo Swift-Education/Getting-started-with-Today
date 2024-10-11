@@ -11,8 +11,10 @@ extension ReminderListViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, Reminder.ID>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Reminder.ID>
     
-    func cellRegistrationHandler(cell: UICollectionViewListCell, indexPath: IndexPath, id: Reminder.ID) {
-        let remider = reminders[indexPath.item]
+    func cellRegistrationHandler(
+        cell: UICollectionViewListCell, indexPath: IndexPath, id: Reminder.ID
+    ) {
+        let remider = reminder(with: id)
         // defaultContentConfiguration()은 미리 정의된 시스템 스타일로 콘텐츠 구성을 생성합니다.
         var contentConfiguration = cell.defaultContentConfiguration()
         contentConfiguration.text = remider.title
@@ -35,6 +37,16 @@ extension ReminderListViewController {
         
         // 정적 변수가 있는 UIColor의 확장
         backgroundConfiguration.backgroundColor = .todayListCellBackground
+    }
+    
+    func reminder(with id: Reminder.ID) -> Reminder {
+        let index = reminders.indexOfReminder(with: id)
+        return reminders[index]
+    }
+    
+    func updateReminder(_ reminder: Reminder) {
+        let index = reminders.indexOfReminder(with: reminder.id)
+        reminders[index] = reminder
     }
     
     // 미리 알림 셀의 앞면에 완료 버튼 셀 액세서리를 추가
