@@ -59,12 +59,13 @@ extension ReminderListViewController {
     // 또한 체크 표시, 재정렬, 삭제 및 공개 표시 셀 액세서리를 목록 셀에 추가할 수 있음
     // CustomViewConfiguration을 반환하는 메서드
     private func doneButtonConfiguration(for reminder: Reminder) -> UICellAccessory.CustomViewConfiguration {
-        
-        
         let symbolName = reminder.isComplete ? "circle.fill" : "circle"
         let symbolConfiguration = UIImage.SymbolConfiguration(textStyle: .title1)
         let image = UIImage(systemName: symbolName, withConfiguration: symbolConfiguration)
-        let button = UIButton()
+        let button = ReminderDoneButton()
+        // 컴파일하는 동안, 시스템은 대상인 ReminderListViewController(self)에 didPressDoneButton(_:) 메서드가 있는지 확인합니다.
+        button.addTarget(self, action: #selector(didPressDoneButton(_:)), for: .touchUpInside)
+        button.id = reminder.id
         button.setImage(image, for: .normal)
         
         // 셀 액세서리가 셀의 콘텐츠 보기 외부 셀의 앞 leading 또는 trailing에 나타나는지 정의
