@@ -8,8 +8,8 @@
 import UIKit
 
 class ReminderViewController: UICollectionViewController {
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, Row>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Row>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Row>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Row>
     
     var reminder: Reminder
     var dataSource: DataSource!
@@ -60,9 +60,17 @@ class ReminderViewController: UICollectionViewController {
     
     func updateSnapshot() {
         var snapshot = Snapshot()
-        snapshot.appendSections([0]) // 섹션 추가하기
+        snapshot.appendSections([.view]) // 섹션 추가하기
         // 아이템 추가하기
-        snapshot.appendItems([Row.title, Row.date, Row.time, Row.notes], toSection: 0)
+        snapshot.appendItems([Row.title, Row.date, Row.time, Row.notes], toSection: .view)
         dataSource.apply(snapshot)
+    }
+    
+    private func section(for indexPath: IndexPath) -> Section {
+        let sectionNumber = isEditing ? indexPath.section + 1 : indexPath.section
+        guard let section = Section(rawValue: sectionNumber) else {
+            fatalError("Unable to find matching section")
+        }
+        return section
     }
 }
