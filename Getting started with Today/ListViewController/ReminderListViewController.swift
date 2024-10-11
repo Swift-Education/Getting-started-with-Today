@@ -13,6 +13,7 @@ class ReminderListViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         let listLayout = listLayout()
         collectionView.collectionViewLayout = listLayout
         
@@ -26,6 +27,20 @@ class ReminderListViewController: UICollectionViewController {
         updateSnapshot()
         
         collectionView.dataSource = dataSource
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let id = reminders[indexPath.item].id
+        pushDetailViewForReminder(with: id)
+        // 사용자가 선택한 항목으로 탭한 항목이 표시되지 않으므로 false를 반환합니다. 대신, 당신은 그 목록 항목에 대한 세부 보기로 전환할 것입니다.
+    }
+    
+    func pushDetailViewForReminder(with id: Reminder.ID) {
+        let reminder = reminder(with: id)
+        // 검색한 리마인더를 ReminderViewController의 새 인스턴스에 주입합니다.
+        let viewController = ReminderViewController(reminder: reminder)
+        // 뷰 컨트롤러가 현재 내비게이션 컨트롤러에 내장되어 있는 경우, 내비게이션 컨트롤러에 대한 참조는 선택적 내비게이션 컨트롤러 속성에 저장됩니다.
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func listLayout() -> UICollectionViewCompositionalLayout {
