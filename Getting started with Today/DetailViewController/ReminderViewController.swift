@@ -8,8 +8,8 @@
 import UIKit
 
 class ReminderViewController: UICollectionViewController {
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, Row>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Row>
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, Row>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Row>
     
     var reminder: Reminder
     var dataSource: DataSource!
@@ -18,6 +18,8 @@ class ReminderViewController: UICollectionViewController {
         self.reminder = reminder
         var listConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         listConfiguration.showsSeparators = false
+        // 컬렉션 뷰는 기본적으로 섹션 헤더를 포함하지 않습니다. 헤더를 포함하도록 컬렉션 뷰의 구성을 업데이트할 것입니다.
+        listConfiguration.headerMode = .firstItemInSection
         let listLayout = UICollectionViewCompositionalLayout.list(using: listConfiguration)
         super.init(collectionViewLayout: listLayout)
     }
@@ -33,19 +35,40 @@ class ReminderViewController: UICollectionViewController {
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
         })
         navigationItem.title = NSLocalizedString("Reminder", comment: "Reminder view controller title")
-        updateSnapshot()
+        navigationItem.rightBarButtonItem = editButtonItem
+        updateSnapshotForViewing()
         
 //        collectionView.dataSource = dataSource
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            updateSnapshotForEditing()
+        } else {
+            updateSnapshotForViewing()
+        }
     }
     
     func cellRegistrationHandler(
         cell: UICollectionViewListCell, indexPath: IndexPath, row: Row
     ) {
-        var contentConfiguration = cell.defaultContentConfiguration()
-        contentConfiguration.text = text(for: row)
-        contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
-        contentConfiguration.image = row.image
-        cell.contentConfiguration = contentConfiguration
+        let section = section(for: indexPath)
+        switch (section, row) {
+        case (_, .header(let title)):
+            var contentConfiguration = cell.defaultContentConfiguration()
+            contentConfiguration.text = title
+            cell.contentConfiguration = contentConfiguration
+        case (.view, _):
+            var contentConfiguration = cell.defaultContentConfiguration()
+            contentConfiguration.text = text(for: row)
+            contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
+            contentConfiguration.image = row.image
+            cell.contentConfiguration = contentConfiguration
+        default:
+            fatalError()
+        }
+        
         cell.tintColor = .todayPrimaryTint
     }
     
@@ -55,14 +78,32 @@ class ReminderViewController: UICollectionViewController {
         case .notes: return reminder.notes
         case .time: return reminder.dueDate.formatted(date: .omitted, time: .shortened)
         case .title: return reminder.title
+        default: return nil
         }
     }
     
-    func updateSnapshot() {
+    private func updateSnapshotForEditing() {
         var snapshot = Snapshot()
-        snapshot.appendSections([0]) // 섹션 추가하기
-        // 아이템 추가하기
-        snapshot.appendItems([Row.title, Row.date, Row.time, Row.notes], toSection: 0)
+        snapshot.appendSections([.title, .date, .notes])
+        snapshot.appendItems([.header(Section.title.name)], toSection: .title)
+        snapshot.appendItems([.header(Section.date.name)], toSection: .date)
+        snapshot.appendItems([.header(Section.notes.name)], toSection: .notes)
         dataSource.apply(snapshot)
+    }
+    
+    func updateSnapshotForViewing() {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.view]) // 섹션 추가하기
+        // 아이템 추가하기
+        snapshot.appendItems([Row.header(""), Row.title, Row.date, Row.time, Row.notes], toSection: .view)
+        dataSource.apply(snapshot)
+    }
+    
+    private func section(for indexPath: IndexPath) -> Section {
+        let sectionNumber = isEditing ? indexPath.section + 1 : indexPath.section
+        guard let section = Section(rawValue: sectionNumber) else {
+            fatalError("Unable to find matching section")
+        }
+        return section
     }
 }
