@@ -11,6 +11,16 @@ extension ReminderListViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Int, Reminder.ID>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Reminder.ID>
     
+    func updateSnapshot(reloading ids: [Reminder.ID] = []) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([0]) // 섹션 추가하기
+        snapshot.appendItems(reminders.map { $0.id }) // 아이템 추가하기
+        if !ids.isEmpty {
+            snapshot.reloadItems(ids)
+        }
+        dataSource.apply(snapshot)
+    }
+    
     func cellRegistrationHandler(
         cell: UICollectionViewListCell, indexPath: IndexPath, id: Reminder.ID
     ) {
@@ -53,6 +63,7 @@ extension ReminderListViewController {
         var reminder = reminder(with: id)
         reminder.isComplete.toggle()
         updateReminder(reminder)
+        updateSnapshot(reloading: [id])
     }
     
     // 미리 알림 셀의 앞면에 완료 버튼 셀 액세서리를 추가
