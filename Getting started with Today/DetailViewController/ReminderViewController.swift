@@ -28,17 +28,14 @@ class ReminderViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // CellRegistration은 셀의 내용과 모양을 구성하는 방법을 지정합니다.
         let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
-        
         dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, itemIdentifier: Row) in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
         })
-        
+        navigationItem.title = NSLocalizedString("Reminder", comment: "Reminder view controller title")
         updateSnapshot()
         
-        collectionView.dataSource = dataSource
+//        collectionView.dataSource = dataSource
     }
     
     func cellRegistrationHandler(
