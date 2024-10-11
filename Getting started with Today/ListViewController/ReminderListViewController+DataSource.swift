@@ -49,6 +49,12 @@ extension ReminderListViewController {
         reminders[index] = reminder
     }
     
+    func completeReminder(with id: Reminder.ID) {
+        var reminder = reminder(with: id)
+        reminder.isComplete.toggle()
+        updateReminder(reminder)
+    }
+    
     // 미리 알림 셀의 앞면에 완료 버튼 셀 액세서리를 추가
     // 또한 체크 표시, 재정렬, 삭제 및 공개 표시 셀 액세서리를 목록 셀에 추가할 수 있음
     // CustomViewConfiguration을 반환하는 메서드
