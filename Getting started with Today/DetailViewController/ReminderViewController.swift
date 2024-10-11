@@ -22,6 +22,15 @@ class ReminderViewController: UICollectionViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func text(for row: Row) -> String? {
+        switch row {
+        case .date: return reminder.dueDate.dayText
+        case .notes: return reminder.notes
+        case .time: return reminder.dueDate.formatted(date: .omitted, time: .shortened)
+        case .title: return reminder.title
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
