@@ -8,9 +8,6 @@
 import UIKit
 
 class ReminderListViewController: UICollectionViewController {
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, String>
-    
     var dataSource: DataSource!
     
     override func viewDidLoad() {
@@ -19,13 +16,7 @@ class ReminderListViewController: UICollectionViewController {
         collectionView.collectionViewLayout = listLayout
         
         // CellRegistration은 셀의 내용과 모양을 구성하는 방법을 지정합니다.
-        let cellRegistration = UICollectionView.CellRegistration { (cell: UICollectionViewListCell, indexPath: IndexPath, itemIdentifier: String) in
-            let remider = Reminder.sampleData[indexPath.item]
-            // defaultContentConfiguration()은 미리 정의된 시스템 스타일로 콘텐츠 구성을 생성합니다.
-            var contentConfiguration = cell.defaultContentConfiguration()
-            contentConfiguration.text = remider.title
-            cell.contentConfiguration = contentConfiguration
-        }
+        let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
         
         dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
