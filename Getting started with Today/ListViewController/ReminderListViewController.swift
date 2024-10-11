@@ -9,6 +9,7 @@ import UIKit
 
 class ReminderListViewController: UICollectionViewController {
     var dataSource: DataSource!
+    var reminders: [Reminder] = Reminder.sampleData
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,14 +19,11 @@ class ReminderListViewController: UICollectionViewController {
         // CellRegistration은 셀의 내용과 모양을 구성하는 방법을 지정합니다.
         let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
         
-        dataSource = DataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, itemIdentifier: Reminder.ID) in
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
         })
         
-        var snapshot = Snapshot()
-        snapshot.appendSections([0]) // 섹션 추가하기
-        snapshot.appendItems(Reminder.sampleData.map { $0.title }) // 아이템 추가하기
-        dataSource.apply(snapshot)
+        updateSnapshot()
         
         collectionView.dataSource = dataSource
     }
