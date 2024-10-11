@@ -33,7 +33,7 @@ class ReminderViewController: UICollectionViewController {
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
         })
         navigationItem.title = NSLocalizedString("Reminder", comment: "Reminder view controller title")
-        updateSnapshot()
+        updateSnapshotForViewing()
         
 //        collectionView.dataSource = dataSource
     }
@@ -41,11 +41,18 @@ class ReminderViewController: UICollectionViewController {
     func cellRegistrationHandler(
         cell: UICollectionViewListCell, indexPath: IndexPath, row: Row
     ) {
-        var contentConfiguration = cell.defaultContentConfiguration()
-        contentConfiguration.text = text(for: row)
-        contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
-        contentConfiguration.image = row.image
-        cell.contentConfiguration = contentConfiguration
+        let section = section(for: indexPath)
+        switch (section, row) {
+        case (.view, _):
+            var contentConfiguration = cell.defaultContentConfiguration()
+            contentConfiguration.text = text(for: row)
+            contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
+            contentConfiguration.image = row.image
+            cell.contentConfiguration = contentConfiguration
+        default:
+            fatalError()
+        }
+        
         cell.tintColor = .todayPrimaryTint
     }
     
@@ -58,7 +65,13 @@ class ReminderViewController: UICollectionViewController {
         }
     }
     
-    func updateSnapshot() {
+    private func updateSnapshotForEditing() {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.title, .date, .notes])
+        dataSource.apply(snapshot)
+    }
+    
+    func updateSnapshotForViewing() {
         var snapshot = Snapshot()
         snapshot.appendSections([.view]) // 섹션 추가하기
         // 아이템 추가하기
