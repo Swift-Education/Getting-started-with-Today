@@ -67,7 +67,7 @@ class ReminderViewController: UICollectionViewController {
         case (.date, .editableDate(let date)):
             cell.contentConfiguration = dateConfiguration(for: cell, with: date)
         case (.notes, .editableText(let notes)):
-            cell.contentConfiguration = titleConfiguration(for: cell, with: notes)
+            cell.contentConfiguration = notesConfiguration(for: cell, with: notes)
         default:
             fatalError()
         }

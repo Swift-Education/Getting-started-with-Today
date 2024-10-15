@@ -54,6 +54,9 @@ extension ReminderViewController {
     {
         var contentConfiguration = cell.textViewConfiguration()
         contentConfiguration.text = notes
+        contentConfiguration.onchanged = { [weak self] notes in
+            self?.worikingReminder.notes = notes
+        }
         return contentConfiguration
     }
     
