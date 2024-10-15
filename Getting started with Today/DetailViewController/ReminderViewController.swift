@@ -18,8 +18,9 @@ class ReminderViewController: UICollectionViewController {
     }
     // 이 임시 알림은 사용자가 편집을 저장하거나 폐기할 때까지 편집 내용을 저장합니다.
     var worikingReminder: Reminder
+    var isAddingNewReminder = false
     var onChange: (Reminder) -> Void
-    var dataSource: DataSource!
+    private var dataSource: DataSource!
     
     init(reminder: Reminder, onChange: @escaping (Reminder) -> Void) {
         self.reminder = reminder
@@ -55,7 +56,11 @@ class ReminderViewController: UICollectionViewController {
         if editing {
             prepareForEditing()
         } else {
-            prepareForViewing()
+            if isAddingNewReminder {
+                onChange(worikingReminder)
+            } else {
+                prepareForViewing()
+            }
         }
     }
     

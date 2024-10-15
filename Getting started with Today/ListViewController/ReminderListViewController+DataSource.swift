@@ -78,6 +78,15 @@ extension ReminderListViewController {
         updateSnapshot(reloading: [id])
     }
     
+    func addReminder(_ reminder: Reminder) {
+        reminders.append(reminder)
+    }
+    
+    func deleteReminder(withId id: Reminder.ID) {
+        let index = reminders.indexOfReminder(with: id)
+        reminders.remove(at: index)
+    }
+    
     private func doneButtonAccessibilityAction(for reminder: Reminder) -> UIAccessibilityCustomAction {
         // VoiceOver는 개체에 대한 작업을 사용할 수 있을 때 사용자에게 경고합니다. 사용자가 옵션을 듣기로 결정하면 VoiceOver는 각 작업의 이름을 읽습니다.
         let name = NSLocalizedString(
