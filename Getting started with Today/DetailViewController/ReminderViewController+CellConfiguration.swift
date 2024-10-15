@@ -43,6 +43,9 @@ extension ReminderViewController {
     {
         var contentConfiguration = cell.datePickerConfiguration()
         contentConfiguration.date = date
+        contentConfiguration.onchange = { [weak self] date in
+            self?.worikingReminder.dueDate = date
+        }
         return contentConfiguration
     }
     
