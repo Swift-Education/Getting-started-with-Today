@@ -12,10 +12,13 @@ class ReminderViewController: UICollectionViewController {
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Row>
     
     var reminder: Reminder
+    // 이 임시 알림은 사용자가 편집을 저장하거나 폐기할 때까지 편집 내용을 저장합니다.
+    var worikingReminder: Reminder
     var dataSource: DataSource!
     
     init(reminder: Reminder) {
         self.reminder = reminder
+        self.worikingReminder = reminder
         var listConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         listConfiguration.showsSeparators = false
         // 컬렉션 뷰는 기본적으로 섹션 헤더를 포함하지 않습니다. 헤더를 포함하도록 컬렉션 뷰의 구성을 업데이트할 것입니다.
@@ -44,9 +47,9 @@ class ReminderViewController: UICollectionViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            updateSnapshotForEditing()
+            prepareForEditing()
         } else {
-            updateSnapshotForViewing()
+            prepareForViewing()
         }
     }
     
@@ -72,6 +75,10 @@ class ReminderViewController: UICollectionViewController {
         cell.tintColor = .todayPrimaryTint
     }
     
+    private func prepareForEditing() {
+        updateSnapshotForEditing()
+    }
+    
     private func updateSnapshotForEditing() {
         var snapshot = Snapshot()
         snapshot.appendSections([.title, .date, .notes])
@@ -82,6 +89,13 @@ class ReminderViewController: UICollectionViewController {
         snapshot.appendItems(
             [.header(Section.notes.name), .editableText(reminder.notes)], toSection: .notes)
         dataSource.apply(snapshot)
+    }
+    
+    private func prepareForViewing() {
+        if worikingReminder != reminder {
+            reminder = worikingReminder
+        }
+        updateSnapshotForViewing()
     }
     
     func updateSnapshotForViewing() {
