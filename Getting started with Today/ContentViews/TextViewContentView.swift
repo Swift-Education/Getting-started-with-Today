@@ -34,6 +34,7 @@ class TextViewContentView: UIView, UIContentView {
         super.init(frame: .zero)
         addPinnedSubview(textView, height: 200)
         textView.backgroundColor = nil
+        // UITextView는 UIView 의 자식이기 때문에 addTarget 하던 방식 X -> Delegate 이용
         textView.delegate = self
         textView.font = UIFont.preferredFont(forTextStyle: .body)
     }
