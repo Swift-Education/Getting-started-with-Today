@@ -1,5 +1,5 @@
 //
-//  TextViewContentView.swift
+//  DatePickerContentView.swift
 //  Getting started with Today
 //
 //  Created by 강동영 on 10/15/24.
@@ -7,23 +7,22 @@
 
 import UIKit
 
-class TextViewContentView: UIView, UIContentView {
+class DatePickerContentView: UIView, UIContentView {
     struct Configuration: UIContentConfiguration {
-        var text: String? = ""
+        var date: Date = Date()
         
-        func makeContentView() -> UIView & UIContentView {
-            return TextViewContentView(self)
+        func makeContentView() -> any UIView & UIContentView {
+            DatePickerContentView(self)
         }
     }
     
-    let textView = UITextView()
+    let datePicker = UIDatePicker()
     var configuration: UIContentConfiguration {
         didSet {
             configure(configuration: configuration)
         }
     }
     
-    // 최소값 44 설정
     override var intrinsicContentSize: CGSize {
         CGSize(width: 0, height: 44)
     }
@@ -31,11 +30,9 @@ class TextViewContentView: UIView, UIContentView {
     init(_ configuration: UIContentConfiguration) {
         self.configuration = configuration
         super.init(frame: .zero)
-        addPinnedSubview(textView, height: 200)
-        textView.backgroundColor = nil
-        textView.font = UIFont.preferredFont(forTextStyle: .body)
+        addPinnedSubview(datePicker)
+        datePicker.preferredDatePickerStyle = .inline
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -43,13 +40,12 @@ class TextViewContentView: UIView, UIContentView {
     
     func configure(configuration: UIContentConfiguration) {
         guard let configuration = configuration as? Configuration else { return }
-        textView.text = configuration.text
+        datePicker.date = configuration.date
     }
 }
 
 extension UICollectionViewListCell {
-    func textViewConfiguration() -> TextViewContentView.Configuration {
-        TextViewContentView.Configuration()
+    func datePickerConfiguration() -> DatePickerContentView.Configuration {
+        DatePickerContentView.Configuration()
     }
 }
-
