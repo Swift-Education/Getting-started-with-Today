@@ -11,6 +11,7 @@ import UIKit
 class TextFieldContentView: UIView, UIContentView {
     struct Configuration: UIContentConfiguration {
         var text: String? = ""
+        var onChange: (String) -> Void = { _ in }
         
         func makeContentView() -> UIView & UIContentView {
             return TextFieldContentView(self)
@@ -34,6 +35,7 @@ class TextFieldContentView: UIView, UIContentView {
         super.init(frame: .zero)
         addPinnedSubview(textField, insets: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
         // clearButtonMode 속성은 텍스트 필드가 콘텐츠가 있을 때 trailing에 텍스트 지우기 버튼을 표시하도록 지시하여 사용자가 텍스트를 빠르게 제거할 수 있는 방법을 제공
+        textField.addTarget(self, action: #selector(didChange(_:)), for: .editingChanged)
         textField.clearButtonMode = .whileEditing
     }
     
@@ -45,6 +47,11 @@ class TextFieldContentView: UIView, UIContentView {
     func configure(configuration: UIContentConfiguration) {
         guard let configuration = configuration as? Configuration else { return }
         textField.text = configuration.text
+    }
+    
+    @objc private func didChange(_ sender: UITextField) {
+        guard var configuration = configuration as? TextFieldContentView.Configuration else { return }
+        configuration.onChange(sender.text ?? "")
     }
 }
 
