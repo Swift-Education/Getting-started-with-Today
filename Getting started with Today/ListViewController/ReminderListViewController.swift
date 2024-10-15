@@ -38,7 +38,10 @@ class ReminderListViewController: UICollectionViewController {
     func pushDetailViewForReminder(with id: Reminder.ID) {
         let reminder = reminder(with: id)
         // 검색한 리마인더를 ReminderViewController의 새 인스턴스에 주입합니다.
-        let viewController = ReminderViewController(reminder: reminder)
+        let viewController = ReminderViewController(reminder: reminder, onChange: { [weak self] reminder in
+            self?.updateReminder(reminder)
+            self?.updateSnapshot(reloading: [reminder.id])
+        })
         // 뷰 컨트롤러가 현재 내비게이션 컨트롤러에 내장되어 있는 경우, 내비게이션 컨트롤러에 대한 참조는 선택적 내비게이션 컨트롤러 속성에 저장됩니다.
         navigationController?.pushViewController(viewController, animated: true)
     }

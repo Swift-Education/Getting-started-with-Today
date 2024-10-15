@@ -11,11 +11,20 @@ class ReminderViewController: UICollectionViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, Row>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Row>
     
-    var reminder: Reminder
+    var reminder: Reminder {
+        didSet {
+            onChange(reminder)
+        }
+    }
+    // 이 임시 알림은 사용자가 편집을 저장하거나 폐기할 때까지 편집 내용을 저장합니다.
+    var worikingReminder: Reminder
+    var onChange: (Reminder) -> Void
     var dataSource: DataSource!
     
-    init(reminder: Reminder) {
+    init(reminder: Reminder, onChange: @escaping (Reminder) -> Void) {
         self.reminder = reminder
+        self.worikingReminder = reminder
+        self.onChange = onChange
         var listConfiguration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
         listConfiguration.showsSeparators = false
         // 컬렉션 뷰는 기본적으로 섹션 헤더를 포함하지 않습니다. 헤더를 포함하도록 컬렉션 뷰의 구성을 업데이트할 것입니다.
@@ -44,9 +53,9 @@ class ReminderViewController: UICollectionViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
-            updateSnapshotForEditing()
+            prepareForEditing()
         } else {
-            updateSnapshotForViewing()
+            prepareForViewing()
         }
     }
     
@@ -64,12 +73,23 @@ class ReminderViewController: UICollectionViewController {
         case (.date, .editableDate(let date)):
             cell.contentConfiguration = dateConfiguration(for: cell, with: date)
         case (.notes, .editableText(let notes)):
-            cell.contentConfiguration = titleConfiguration(for: cell, with: notes)
+            cell.contentConfiguration = notesConfiguration(for: cell, with: notes)
         default:
             fatalError()
         }
         
         cell.tintColor = .todayPrimaryTint
+    }
+    
+    @objc func didCancelEdit() {
+        worikingReminder = reminder
+        setEditing(false, animated: true)
+    }
+    
+    private func prepareForEditing() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .cancel, target: self, action: #selector(didCancelEdit))
+        updateSnapshotForEditing()
     }
     
     private func updateSnapshotForEditing() {
@@ -82,6 +102,14 @@ class ReminderViewController: UICollectionViewController {
         snapshot.appendItems(
             [.header(Section.notes.name), .editableText(reminder.notes)], toSection: .notes)
         dataSource.apply(snapshot)
+    }
+    
+    private func prepareForViewing() {
+        navigationItem.leftBarButtonItem = nil
+        if worikingReminder != reminder {
+            reminder = worikingReminder
+        }
+        updateSnapshotForViewing()
     }
     
     func updateSnapshotForViewing() {
