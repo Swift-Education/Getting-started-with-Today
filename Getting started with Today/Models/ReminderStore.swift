@@ -25,6 +25,33 @@ final class ReminderStore {
         }
     }
     
+    func requestAccess() async throws {
+        let status = EKEventStore.authorizationStatus(for: .reminder)
+        
+        switch status {
+        case .authorized, .fullAccess, .writeOnly:
+            return
+        case .notDetermined:
+            if #available(iOS 17.0, *) {
+                let accessGuard = try await ekStore.requestFullAccessToReminders()
+                guard accessGuard else {
+                    throw TodayError.accessDenied
+                }
+            } else {
+                let accessGuard = try await ekStore.requestAccess(to: .reminder)
+                guard accessGuard else {
+                    throw TodayError.accessDenied
+                }
+            }
+        case .restricted:
+            throw TodayError.accessRestricted
+        case .denied:
+            throw TodayError.accessDenied
+        @unknown default:
+            throw TodayError.unknown
+        }
+    }
+    
     func readAll() async throws -> [Reminder] {
         guard isAvailable else {
             throw TodayError.accessDenied
