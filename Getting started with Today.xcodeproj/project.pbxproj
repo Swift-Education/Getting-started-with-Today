@@ -32,6 +32,7 @@
 		B55AD2BB2CBFA2080040F59F /* TodayError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2BA2CBFA2080040F59F /* TodayError.swift */; };
 		B55AD2BD2CBFA5A30040F59F /* EKEventStore+AsyncFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2BC2CBFA5A30040F59F /* EKEventStore+AsyncFetch.swift */; };
 		B55AD2BF2CBFD4010040F59F /* Reminder+EKReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2BE2CBFD4010040F59F /* Reminder+EKReminder.swift */; };
+		B55AD2C12CBFD6EB0040F59F /* ReminderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2C02CBFD6EB0040F59F /* ReminderStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		B55AD2BA2CBFA2080040F59F /* TodayError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayError.swift; sourceTree = "<group>"; };
 		B55AD2BC2CBFA5A30040F59F /* EKEventStore+AsyncFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EKEventStore+AsyncFetch.swift"; sourceTree = "<group>"; };
 		B55AD2BE2CBFD4010040F59F /* Reminder+EKReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reminder+EKReminder.swift"; sourceTree = "<group>"; };
+		B55AD2C02CBFD6EB0040F59F /* ReminderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderStore.swift; sourceTree = "<group>"; };
 		B5FB75C32CB5464C00D40917 /* Getting started with Today.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Getting started with Today.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -120,6 +122,7 @@
 				B55AD2BA2CBFA2080040F59F /* TodayError.swift */,
 				B55AD2BC2CBFA5A30040F59F /* EKEventStore+AsyncFetch.swift */,
 				B55AD2BE2CBFD4010040F59F /* Reminder+EKReminder.swift */,
+				B55AD2C02CBFD6EB0040F59F /* ReminderStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				B55AD2742CBE2F380040F59F /* ReminderViewController+Section.swift in Sources */,
 				B55AD2752CBE2F380040F59F /* ReminderDoneButton.swift in Sources */,
 				B55AD2762CBE2F380040F59F /* ReminderListViewController.swift in Sources */,
+				B55AD2C12CBFD6EB0040F59F /* ReminderStore.swift in Sources */,
 				B55AD2BB2CBFA2080040F59F /* TodayError.swift in Sources */,
 				B55AD2BF2CBFD4010040F59F /* Reminder+EKReminder.swift in Sources */,
 				B55AD2772CBE2F380040F59F /* ReminderListViewController+Actions.swift in Sources */,
