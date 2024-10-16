@@ -108,6 +108,23 @@ extension ReminderListViewController {
         }
     }
     
+    func reminderStoreChanged() {
+        Task {
+            do {
+                reminders = try await reminderStore.readAll()
+                NotificationCenter.default.addObserver(
+                    self, selector: #selector(eventStoreChanged(_:)), name: .EKEventStoreChanged, object: nil)
+            } catch TodayError.accessDenied, TodayError.accessRestricted {
+                #if DEBUG
+                reminders = Reminder.sampleData
+                #endif
+            } catch {
+                showError(error)
+            }
+            updateSnapshot()
+        }
+    }
+    
     private func doneButtonAccessibilityAction(for reminder: Reminder) -> UIAccessibilityCustomAction {
         // VoiceOver는 개체에 대한 작업을 사용할 수 있을 때 사용자에게 경고합니다. 사용자가 옵션을 듣기로 결정하면 VoiceOver는 각 작업의 이름을 읽습니다.
         let name = NSLocalizedString(
