@@ -12,6 +12,8 @@ class ProgressHeaderView: UICollectionReusableView {
     
     var progress: CGFloat = 0 {
         didSet {
+            // setNeedsLayout()를 호출하면 현재 레이아웃이 무효화되고 업데이트가 트리거됩니다.
+            setNeedsLayout()
             heightConstraint?.constant = progress * bounds.height
             UIView.animate(withDuration: 0.2) { [weak self] in
                 self?.layoutIfNeeded()
@@ -23,11 +25,21 @@ class ProgressHeaderView: UICollectionReusableView {
     private let lowerView = UIView(frame: .zero)
     private let containerView = UIView(frame: .zero)
     private var heightConstraint: NSLayoutConstraint?
-    
+    // 버튼에 접근성 값을 추가할 것입니다. 각 알림의 완료 상태에 대한 현지화된 문자열을 계산하는 것으로 시작하십시오.
+    var valueFormat: String {
+        NSLocalizedString("%d precent", comment: "progress precentage value format")
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         prepareSubviews()
+        
+        // 투데이앱 접근성 검토에서 그 요소가 보조 기술이 접근할 수 있는 접근성 요소인지 여부를 나타냅니다. 표준 UIKit 컨트롤은 기본적으로 이 값을 활성화합니다.
+        isAccessibilityElement = true
+        accessibilityLabel = NSLocalizedString("Progress", comment: "Progress view accessibility")
+        // UIAccessibilityTraits를 사용하여 접근성 요소가 어떻게 작동하는지 설명할 수 있습니다.
+        // VoiceOver는 progress 뷰가 사용자에게 이 보기로 돌아가고 싶어할 수도 있다는 신호를 보내기 위해 자주 업데이트된다는 것을 읽습니다.
+        accessibilityTraits.update(with: .updatesFrequently)
     }
     
     required init?(coder: NSCoder) {
@@ -36,6 +48,7 @@ class ProgressHeaderView: UICollectionReusableView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        accessibilityValue = String(format: valueFormat, Int(progress * 100.0))
         heightConstraint?.constant = progress * bounds.height
         containerView.layer.masksToBounds = true
         containerView.layer.cornerRadius = 0.5 * containerView.bounds.width
