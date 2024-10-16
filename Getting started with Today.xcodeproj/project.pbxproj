@@ -28,6 +28,7 @@
 		B55AD2862CBE5ADE0040F59F /* DatePickerContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2852CBE5ADE0040F59F /* DatePickerContentView.swift */; };
 		B55AD2B52CBEB0F30040F59F /* ReminderListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2B42CBEB0F30040F59F /* ReminderListStyle.swift */; };
 		B55AD2B72CBF85C60040F59F /* ProgressHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2B62CBF85C60040F59F /* ProgressHeaderView.swift */; };
+		B55AD2B92CBF9F870040F59F /* CAGradientLayer+ListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55AD2B82CBF9F870040F59F /* CAGradientLayer+ListStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		B55AD2852CBE5ADE0040F59F /* DatePickerContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerContentView.swift; sourceTree = "<group>"; };
 		B55AD2B42CBEB0F30040F59F /* ReminderListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListStyle.swift; sourceTree = "<group>"; };
 		B55AD2B62CBF85C60040F59F /* ProgressHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHeaderView.swift; sourceTree = "<group>"; };
+		B55AD2B82CBF9F870040F59F /* CAGradientLayer+ListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+ListStyle.swift"; sourceTree = "<group>"; };
 		B5FB75C32CB5464C00D40917 /* Getting started with Today.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Getting started with Today.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -108,6 +110,7 @@
 				B55AD2642CBE2F380040F59F /* Date+Today.swift */,
 				B55AD2652CBE2F380040F59F /* Reminder.swift */,
 				B55AD2B42CBEB0F30040F59F /* ReminderListStyle.swift */,
+				B55AD2B82CBF9F870040F59F /* CAGradientLayer+ListStyle.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				B55AD2B52CBEB0F30040F59F /* ReminderListStyle.swift in Sources */,
 				B55AD2782CBE2F380040F59F /* ReminderListViewController+DataSource.swift in Sources */,
 				B55AD27E2CBE2F710040F59F /* UIView+PinnedSubview.swift in Sources */,
+				B55AD2B92CBF9F870040F59F /* CAGradientLayer+ListStyle.swift in Sources */,
 				B55AD2842CBE3A770040F59F /* TextViewContentView.swift in Sources */,
 				B55AD2792CBE2F380040F59F /* Date+Today.swift in Sources */,
 				B55AD27A2CBE2F380040F59F /* Reminder.swift in Sources */,
