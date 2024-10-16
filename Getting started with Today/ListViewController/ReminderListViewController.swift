@@ -109,6 +109,19 @@ class ReminderListViewController: UICollectionViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
+    func showError(_ error: Error) {
+        let alertTitle = NSLocalizedString("Error", comment: "Error alert title")
+        let alert = UIAlertController(
+            title: alertTitle, message: error.localizedDescription, preferredStyle: .alert)
+        let actionTitle = NSLocalizedString("Ok", comment: "Alert Ok button title")
+        alert.addAction(
+            UIAlertAction(
+                title: actionTitle, style: .default) { [weak self] _ in
+                    self?.dismiss(animated: true)
+                })
+        present(alert, animated: true)
+    }
+    
     private func listLayout() -> UICollectionViewCompositionalLayout {
         var listConfiguration = UICollectionLayoutListConfiguration(appearance: .grouped)
         listConfiguration.headerMode = .supplementary
