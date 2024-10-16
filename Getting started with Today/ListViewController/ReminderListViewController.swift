@@ -40,6 +40,8 @@ class ReminderListViewController: UICollectionViewController {
         navigationItem.rightBarButtonItem = addButton
         
         listStyleSegmentControl.selectedSegmentIndex = listStyle.rawValue
+        listStyleSegmentControl.addTarget(
+            self, action: #selector(didChangeListStyle(_:)), for: .valueChanged)
         navigationItem.titleView = listStyleSegmentControl
         
         if #available(iOS 16, *) {
