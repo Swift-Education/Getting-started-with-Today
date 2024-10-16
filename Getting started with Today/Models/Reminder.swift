@@ -8,7 +8,7 @@
 import Foundation
 
 struct Reminder: Equatable, Identifiable {
-    let id: String = UUID().uuidString
+    var id: String = UUID().uuidString
     var title: String
     var dueDate: Date
     var notes: String? = nil

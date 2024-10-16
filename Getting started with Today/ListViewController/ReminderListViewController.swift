@@ -9,7 +9,7 @@ import UIKit
 
 class ReminderListViewController: UICollectionViewController {
     var dataSource: DataSource!
-    var reminders: [Reminder] = Reminder.sampleData
+    var reminders: [Reminder] = []
     var listStyle: ReminderListStyle = .today
     var filteredReminders: [Reminder] {
         return reminders.filter { listStyle.shouldInclude(date: $0.dueDate) }.sorted {
@@ -65,6 +65,8 @@ class ReminderListViewController: UICollectionViewController {
         updateSnapshot()
         
         collectionView.dataSource = dataSource
+        
+        prepareReminderStore()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,6 +109,19 @@ class ReminderListViewController: UICollectionViewController {
         })
         // 뷰 컨트롤러가 현재 내비게이션 컨트롤러에 내장되어 있는 경우, 내비게이션 컨트롤러에 대한 참조는 선택적 내비게이션 컨트롤러 속성에 저장됩니다.
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func showError(_ error: Error) {
+        let alertTitle = NSLocalizedString("Error", comment: "Error alert title")
+        let alert = UIAlertController(
+            title: alertTitle, message: error.localizedDescription, preferredStyle: .alert)
+        let actionTitle = NSLocalizedString("Ok", comment: "Alert Ok button title")
+        alert.addAction(
+            UIAlertAction(
+                title: actionTitle, style: .default) { [weak self] _ in
+                    self?.dismiss(animated: true)
+                })
+        present(alert, animated: true)
     }
     
     private func listLayout() -> UICollectionViewCompositionalLayout {
