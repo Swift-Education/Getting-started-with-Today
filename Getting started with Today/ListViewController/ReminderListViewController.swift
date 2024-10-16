@@ -20,10 +20,19 @@ class ReminderListViewController: UICollectionViewController {
         ReminderListStyle.today.name, ReminderListStyle.future.name, ReminderListStyle.all.name
     ])
     var headerView: ProgressHeaderView?
+    var progress: CGFloat {
+        let chunkSize = 1.0 / CGFloat(filteredReminders.count)
+        return filteredReminders.reduce(0.0) {
+            let chuck = $1.isComplete ? chunkSize : 0
+            return $0 + chuck
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        
+        collectionView.backgroundColor = .todayGradientFutureBegin
+        
         let listLayout = listLayout()
         collectionView.collectionViewLayout = listLayout
         
@@ -62,6 +71,18 @@ class ReminderListViewController: UICollectionViewController {
         let id = filteredReminders[indexPath.item].id
         pushDetailViewForReminder(with: id)
         // 사용자가 선택한 항목으로 탭한 항목이 표시되지 않으므로 false를 반환합니다. 대신, 당신은 그 목록 항목에 대한 세부 보기로 전환할 것입니다.
+    }
+    
+    override func collectionView(
+        _ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView,
+        forElementKind elementKind: String, at indexPath: IndexPath
+    ) {
+        guard elementKind == ProgressHeaderView.elementKind,
+              let progressView = view as? ProgressHeaderView
+        else {
+            return
+        }
+        progressView.progress = progress
     }
     
     func pushDetailViewForReminder(with id: Reminder.ID) {

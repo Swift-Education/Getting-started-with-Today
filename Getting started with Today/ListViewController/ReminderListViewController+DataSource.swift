@@ -28,6 +28,7 @@ extension ReminderListViewController {
             snapshot.reloadItems(ids)
         }
         dataSource.apply(snapshot)
+        headerView?.progress = progress
     }
     
     func cellRegistrationHandler(
@@ -60,6 +61,7 @@ extension ReminderListViewController {
         
         // 정적 변수가 있는 UIColor의 확장
         backgroundConfiguration.backgroundColor = .todayListCellBackground
+        cell.backgroundConfiguration = backgroundConfiguration
     }
     
     func reminder(with id: Reminder.ID) -> Reminder {
