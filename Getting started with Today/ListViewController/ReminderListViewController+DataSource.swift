@@ -109,8 +109,16 @@ extension ReminderListViewController {
     }
     
     func deleteReminder(withId id: Reminder.ID) {
-        let index = reminders.indexOfReminder(with: id)
-        reminders.remove(at: index)
+        do {
+            // 6. 식별자로 알림을 제거하십시오.
+            try reminderStore.remove(with: id)
+            let index = reminders.indexOfReminder(with: id)
+            reminders.remove(at: index)
+        } catch TodayError.accessDenied { // 7. 아무것도 하지 않는 TodayError.accessDenied에 대한 캐치 블록을 추가하십시오.
+        } catch {
+            // 8. 오류를 보여주는 캐치 블록을 추가하세요.
+            showError(error)
+        }
     }
     
     func prepareReminderStore() {

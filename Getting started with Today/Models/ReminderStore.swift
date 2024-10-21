@@ -91,6 +91,17 @@ final class ReminderStore {
         return ekReminder.calendarItemIdentifier
     }
     
+    func remove(with id: Reminder.ID) throws {
+        // 2. 미리 알림 액세스를 사용할 수 없는 경우 오류를 발생시키는 가드 문을 추가하십시오.
+        guard isAvailable else {
+            throw TodayError.accessDenied
+        }
+        // 3. 식별자와 함께 알림을 읽으십시오.
+        let ekReminder = try read(with: id)
+        // 4. 상점에서 알림을 제거하십시오.
+        try ekStore.remove(ekReminder, commit: true)
+    }
+    
     private func read(with id: Reminder.ID) throws -> EKReminder {
         guard let ekReminder = ekStore.calendarItem(withIdentifier: id) as? EKReminder else {
             throw TodayError.failedReadingCalendarItem
