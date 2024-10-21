@@ -8,6 +8,11 @@
 import UIKit
 
 extension ReminderListViewController {
+    
+    @objc func eventStoreChanged(_ notification: NSNotification) {
+        reminderStoreChanged()
+    }
+    
     //@objc 속성은 해당 메서드를 Objective-C 코드에서 사용할 수 있게 합니다.
     @objc func didPressDoneButton(_ sender: ReminderDoneButton) {
         guard let id = sender.id else { return }
