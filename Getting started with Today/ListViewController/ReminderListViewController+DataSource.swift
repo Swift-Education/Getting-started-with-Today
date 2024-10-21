@@ -84,7 +84,20 @@ extension ReminderListViewController {
     }
     
     func addReminder(_ reminder: Reminder) {
-        reminders.append(reminder)
+        var reminder = reminder
+        //  2. 미리 알림을 저장하는 do 블록을 추가하고,
+        do {
+            // 2. 식별자를 새로운 상수에 저장합니다. append 문을 do 블록으로 이동하십시오.
+            let idFromStore = try reminderStore.save(reminder)
+            // 3. 미리 알림을 배열에 추가하기 전에 수신 식별자를 알림 변수에 할당하십시오.
+            reminder.id = idFromStore
+            reminders.append(reminder)
+        } catch TodayError.accessDenied { // 4. 아무것도 하지 않는 TodayError.accessDenied에 대한 캐치 블록을 추가하십시오.
+            
+        } catch {
+            // 5. 오류를 보여주는 캐치 블록을 추가하세요.
+            showError(error)
+        }
     }
     
     func deleteReminder(withId id: Reminder.ID) {
@@ -98,9 +111,9 @@ extension ReminderListViewController {
                 try await reminderStore.requestAccess()
                 reminders = try await reminderStore.readAll()
             } catch TodayError.accessDenied, TodayError.accessRestricted {
-                #if DEBUG
+#if DEBUG
                 reminders = Reminder.sampleData
-                #endif
+#endif
             } catch {
                 showError(error)
             }
@@ -115,9 +128,9 @@ extension ReminderListViewController {
                 NotificationCenter.default.addObserver(
                     self, selector: #selector(eventStoreChanged(_:)), name: .EKEventStoreChanged, object: nil)
             } catch TodayError.accessDenied, TodayError.accessRestricted {
-                #if DEBUG
+#if DEBUG
                 reminders = Reminder.sampleData
-                #endif
+#endif
             } catch {
                 showError(error)
             }
@@ -128,7 +141,7 @@ extension ReminderListViewController {
     private func doneButtonAccessibilityAction(for reminder: Reminder) -> UIAccessibilityCustomAction {
         // VoiceOver는 개체에 대한 작업을 사용할 수 있을 때 사용자에게 경고합니다. 사용자가 옵션을 듣기로 결정하면 VoiceOver는 각 작업의 이름을 읽습니다.
         let name = NSLocalizedString(
-                    "Toggle completion", comment: "Reminder done button accessibility label")
+            "Toggle completion", comment: "Reminder done button accessibility label")
         // 기본적으로 클로저는 내부에서 사용하는 외부 값에 대한 강력한 참조를 생성합니다. 뷰 컨트롤러에 대한 약한 참조를 지정하면 순환 참조가 방지됩니다.
         let action = UIAccessibilityCustomAction(name: name) { [weak self] action in
             self?.completeReminder(with: reminder.id)
